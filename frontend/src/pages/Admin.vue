@@ -38,7 +38,7 @@ onMounted(() => {
         </template>
       </el-table-column>
       <el-table-column>
-        <template #default="{ row }">
+        <template #default="{ }">
           <el-button type="danger" size="small">X</el-button>
         </template>
       </el-table-column>

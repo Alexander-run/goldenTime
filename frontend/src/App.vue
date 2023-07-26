@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import HeadMenu from '@/components/layout/HeadMenu.vue'
+import HeadMenu from './components/layout/HeadMenu.vue'
 
 </script>
 
