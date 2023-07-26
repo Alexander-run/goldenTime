@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Index from '@/pages/Index.vue'
-import Photography from '@/pages/photography/Index.vue'
+import Admin from '@/pages/Admin.vue'
+import User from '@/pages/User.vue'
+import Login from '@/pages/Login.vue'
 
 const routes = [
   {
@@ -13,9 +15,19 @@ const routes = [
         component: Index
       },
       {
-        path: 'photography',
-        name: 'photography',
-        component: Photography
+        path: 'login',
+        name: 'login',
+        component: Login
+      },
+      {
+        path: 'admin',
+        name: 'admin',
+        component: Admin
+      },
+      {
+        path: 'user',
+        name: 'user',
+        component: User
       }
     ]
   }

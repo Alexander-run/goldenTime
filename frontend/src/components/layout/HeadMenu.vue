@@ -17,7 +17,8 @@ const activeIndex = computed(() => route.path)
     class="head-menu"
     mode="horizontal"
   >
-    <el-menu-item index="/photography">相册</el-menu-item>
+    <el-menu-item index="/user">user</el-menu-item>
+    <el-menu-item index="/admin">admin</el-menu-item>
   </el-menu>
 </template>
 <style lang="less" scoped>
