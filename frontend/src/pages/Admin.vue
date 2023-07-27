@@ -6,6 +6,7 @@ import {
   onMounted
 } from 'vue'
 import axios from 'axios'
+import * as XLSX from 'xlsx'
 import { ElMessage } from 'element-plus'
 declare module 'element-plus' {
   export const ElMessage: any
@@ -15,7 +16,6 @@ interface UserTableItem {
   id: number,
   name: string,
   depatureDate: string,
-  backDate: string,
   headCount: number,
   description: string,
   isCheckedIn: boolean,
@@ -113,6 +113,27 @@ const handleCreateJourney = () => {
     initTable()
   })
 }
+const handleDownload = () => {
+  const data = userTableData.value.map((item: UserTableItem) => {
+    return {
+      姓名: item.name,
+      出发日期: item.depatureDate,
+      出行人数: item.headCount,
+      备注: item.description,
+      已交定金: item.isCheckedIn ? '是' : '否',
+    }
+  })
+  const ws = XLSX.utils.json_to_sheet(data)
+  const wb = XLSX.utils.book_new()
+  XLSX.utils.book_append_sheet(wb, ws, 'SheetJS')
+
+  XLSX.writeFile(wb, '登记用户.xlsx')
+
+  ElMessage({
+    message: '开始下载',
+    type: 'success',
+  })
+}
 onMounted(() => {
   initTable()
 })
@@ -131,10 +152,10 @@ onMounted(() => {
     <div v-else>
       <el-tabs v-model="activeTab" class="tabs">
         <el-tab-pane label="登记用户管理" name="users">
+          <el-button @click="handleDownload" type="primary">下载所有信息(xlsx)</el-button>
           <el-table :data="userTableData" class="table">
             <el-table-column prop="name" label="姓名" />
             <el-table-column prop="depatureDate" label="出发日期" width="110" />
-            <el-table-column prop="backDate" label="回程日期" width="110" />
             <el-table-column prop="headCount" label="出行人数" width="80" />
             <el-table-column prop="description" label="备注" width="200" />
             <el-table-column prop="isCheckedIn" label="已交定金" width="80">
