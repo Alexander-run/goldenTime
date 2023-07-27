@@ -3,7 +3,8 @@
 import {
   ref,
   Ref,
-  onMounted
+  onMounted,
+  computed
 } from 'vue'
 import axios from 'axios'
 import moment from 'moment'
@@ -29,6 +30,15 @@ const formData: Ref<FormData> = ref({
   description: '',
 })
 const availableDates = ref([])
+const selectedFee = ref(0)
+const handleDateChange = (e) => {
+  const target = availableDates.value.find((item: any) => {
+    return item.depatureDate === e
+  })
+  if (target) {
+    selectedFee.value = target.fee
+  }
+}
 const onSubmit = () => {
   // TODO post update to backend
   axios.post('/api/cases/create', formData.value).then((res: any) => {
@@ -48,14 +58,15 @@ const onSubmit = () => {
 const initAvailableDates = () => {
   axios.get('/api/journeys/all').then((res: any) => {
     if (res.status.toString()[0] == 2) {
-      availableDates.value = res.data.map((item: any) => item.depatureDate)
+      availableDates.value = res.data
     }
-    console.log(availableDates.value)
   })
 }
 const disabledDate = (time: Date) => {
   const temp = moment(time).format('YYYY-MM-DD')
-  return availableDates.value.indexOf(temp) === -1
+  return !availableDates.value.some((item: any) => {
+    return item.depatureDate === temp
+  })
 }
 onMounted(() => {
   initAvailableDates()
@@ -84,11 +95,13 @@ onMounted(() => {
         <el-date-picker
           :disabled-date="disabledDate"
           v-model="formData.depatureDate"
+          @change="handleDateChange"
           type="date"
           placeholder="选择日期"
           format="YYYY-MM-DD"
           value-format="YYYY-MM-DD">
         </el-date-picker>
+        <span>{{ selectedFee }} 元/人</span>
       </el-form-item>
       <el-form-item label="出行人数" prop="headCount">
         <el-input-number v-model="formData.headCount"></el-input-number>
