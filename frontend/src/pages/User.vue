@@ -1,51 +1,89 @@
 <script lang="ts" setup>
+// @ts-nocheck
 import {
   ref,
-  Ref
+  Ref,
+  onMounted
 } from 'vue'
 import axios from 'axios'
+import moment from 'moment'
+import { ElMessage } from 'element-plus'
+declare module 'element-plus' {
+  export const ElMessage: any
+}
+
+const fromPos = '北京-望京-华彩'
+const toPos = '承德-丰宁-大滩'
+const leader = '曹旭'
 
 interface FormData {
   name: string,
   depatureDate: string,
-  backDate: string,
   headCount: number,
   description: string,
 }
 const formData: Ref<FormData> = ref({
   name: '',
   depatureDate: '',
-  backDate: '',
   headCount: 0,
   description: '',
 })
+const availableDates = ref([])
 const onSubmit = () => {
   // TODO post update to backend
-  axios.post('/api/cases/create', formData.value).then(res => {
-    console.log(res)
+  axios.post('/api/cases/create', formData.value).then((res: any) => {
+    if (res.status.toString()[0] == 2) {
+      ElMessage({
+        message: '创建成功',
+        type: 'success',
+      })
+    } else {
+      ElMessage({
+        message: '创建失败',
+        type: 'error',
+      })
+    }
   })
 }
+const initAvailableDates = () => {
+  axios.get('/api/journeys/all').then((res: any) => {
+    if (res.status.toString()[0] == 2) {
+      availableDates.value = res.data.map((item: any) => item.depatureDate)
+    }
+    console.log(availableDates.value)
+  })
+}
+const disabledDate = (time: Date) => {
+  const temp = moment(time).format('YYYY-MM-DD')
+  return availableDates.value.indexOf(temp) === -1
+}
+onMounted(() => {
+  initAvailableDates()
+})
 </script>
 <template>
   <div class="user">
-    <h2>输入你的信息</h2>
-    {{ formData.backDate }}
+    <h2>行程信息</h2>
+    <el-form class="form">
+      <el-form-item label="集合地">
+        <el-input v-model="fromPos" />
+      </el-form-item>
+      <el-form-item label="目的地">
+        <el-input v-model="toPos" />
+      </el-form-item>
+      <el-form-item label="领队">
+        <el-input v-model="leader" />
+      </el-form-item>
+    </el-form>
+    <h2>你的信息</h2>
     <el-form :model="formData" class="form">
       <el-form-item label="怎么称呼～" prop="name">
         <el-input v-model="formData.name"></el-input>
       </el-form-item>
       <el-form-item label="出发日期" prop="depatureDate">
         <el-date-picker
+          :disabled-date="disabledDate"
           v-model="formData.depatureDate"
-          type="date"
-          placeholder="选择日期"
-          format="YYYY-MM-DD"
-          value-format="YYYY-MM-DD">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label="回程日期" prop="backDate">
-        <el-date-picker
-          v-model="formData.backDate"
           type="date"
           placeholder="选择日期"
           format="YYYY-MM-DD"
