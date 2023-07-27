@@ -39,7 +39,8 @@ const onSubmit = () => {
           v-model="formData.depatureDate"
           type="date"
           placeholder="选择日期"
-          format="YYYY-MM-DD">
+          format="YYYY-MM-DD"
+          value-format="YYYY-MM-DD">
         </el-date-picker>
       </el-form-item>
       <el-form-item label="回程日期" prop="backDate">
@@ -47,7 +48,8 @@ const onSubmit = () => {
           v-model="formData.backDate"
           type="date"
           placeholder="选择日期"
-          format="YYYY-MM-DD">
+          format="YYYY-MM-DD"
+          value-format="YYYY-MM-DD">
         </el-date-picker>
       </el-form-item>
       <el-form-item label="出行人数" prop="headCount">
