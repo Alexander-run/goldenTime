@@ -37,7 +37,6 @@ const activePage = ref('journeyTable')
 const userTableData: Ref<UserTableItem[]> = ref([])
 const journeyTableData: Ref<JourneyTableItem[]> = ref([])
 const newJourneyForm: Ref<JourneyTableItem> = ref({
-  id: 0,
   depatureDate: '',
   fee: 0,
   depaturePositionName: '',
@@ -47,7 +46,7 @@ const newJourneyForm: Ref<JourneyTableItem> = ref({
   description: '',
 })
 const selectedJourneyForm: Ref<JourneyTableItem> = ref({
-  id: 0,
+  id: null,
   depatureDate: '',
   fee: 0,
   depaturePositionName: '',
