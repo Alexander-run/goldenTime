@@ -262,7 +262,7 @@ onMounted(() => {
 </script>
 <template>
   <div class="user">
-    <h2>Admin</h2>
+    <h2>坝上骑马活动管理中心</h2>
     <el-form class="form" v-if="!isAdmin" @submit.prevent="handleLogin">
       <el-form-item label="接头暗号">
         <el-input v-model="password" placeholder="接头暗号" type="password" />

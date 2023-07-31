@@ -99,7 +99,7 @@ onMounted(() => {
 </script>
 <template>
   <div class="user">
-    <h2>行程信息</h2>
+    <h2>报名中心</h2>
     <div class="journey-content-container" v-if="selectedJourney && Object.keys(selectedJourney).length>0">
       <el-form class="form">
         <el-form-item label="集合地">
