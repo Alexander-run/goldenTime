@@ -29,6 +29,7 @@ const formData: Ref<FormData> = ref({
   headCount: 0,
   description: '',
 })
+const showMobileDatePicker = ref(false)
 const selectedJourney = ref({})
 const availableJourneys = ref([])
 const selectedFee = ref(0)
@@ -55,6 +56,17 @@ const handleDateChange = (e) => {
     selectedFee.value = target.fee
     selectedJourney.value = target
   }
+}
+const onMobileDateChange = (value) => {
+  formData.value.depatureDate = moment(value).format('YYYY-MM-DD')
+  const target = availableJourneys.value.find((item: any) => {
+    return item.depatureDate === moment(value).format('YYYY-MM-DD')
+  })
+  if (target) {
+    selectedFee.value = target.fee
+    selectedJourney.value = target
+  }
+  showMobileDatePicker.value = false
 }
 const onMobileSubmit = async() => {
   ElMessageBox.confirm('您每天只有三次报名机会，请确认信息是否正确，确认报名吗？', '提示', {
@@ -116,6 +128,18 @@ const disabledDate = (time: Date) => {
   return !availableJourneys.value.some((item: any) => {
     return item.depatureDate === temp
   })
+}
+const mobileDateFormatter = (day: Date) => {
+  const tarDay = moment(day.date).format('YYYY-MM-DD')
+  const target = availableJourneys.value.find((item: any) => {
+    return item.depatureDate === tarDay
+  })
+  if (!target) {
+    day.type = 'disabled'
+  } else {
+    day.bottomInfo = `￥${target.fee}`
+  }
+  return day
 }
 onMounted(() => {
   initAvailableJourneys()
@@ -195,17 +219,9 @@ onMounted(() => {
       <h3>你的信息</h3>
       <van-form @submit="onMobileSubmit" class="form">
         <van-cell-group inset>
-          <van-field label="怎么称呼～" v-model="formData.name" :rules="[{ required: true, message: '请输入姓名', trigger: 'blur' }]"/>     
-          <el-date-picker
-            auto-focus
-            :disabled-date="disabledDate"
-            v-model="formData.depatureDate"
-            @change="handleDateChange"
-            type="date"
-            placeholder="选择日期"
-            format="YYYY-MM-DD"
-            value-format="YYYY-MM-DD">
-          </el-date-picker>
+          <van-field label="怎么称呼～" v-model="formData.name" :rules="[{ required: true, message: '请输入姓名', trigger: 'blur' }]"/>   
+          <van-cell title="选择出发日期" :value="formData.depatureDate" is-link @click="showMobileDatePicker = true" />
+          <van-calendar v-model:show="showMobileDatePicker" @confirm="onMobileDateChange" :formatter="mobileDateFormatter" />
           <van-field label="出行人数" v-model="formData.headCount" type="digit" :rules="[{ required: true, message: '请输入人数', trigger: 'blur' }]" />
           <van-field label="备注" v-model="formData.description" type="textarea" rows="3" />        
         </van-cell-group>
@@ -219,6 +235,9 @@ onMounted(() => {
   </div>
 </template>
 <style lang="less" scoped>
+:deep(.van-calendar__bottom-info) {
+  color: lightcoral;
+}
 .web-user {
   display: flex;
   flex-direction: column;
