@@ -239,7 +239,10 @@ onMounted(() => {
     </div>
     <el-dialog class="qr-code-dialog" title="报名成功,请尽快联系领队支付订金，支付完成后会正式帮您预留房间与马匹" v-model="qrDialogVisible" width="50%">
       <div class="body">
-        <img src="/wechatpayQRCode.png" alt="qr" style="width: 50%;"/>
+        <div class="code-group">
+          <img src="/wechatQR.png" alt="qr"/>
+          <img src="/alipayQR.png" alt="qr"/>
+        </div>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="qrDialogVisible = false">关闭</el-button>
@@ -248,7 +251,10 @@ onMounted(() => {
     <van-popup v-model:show="mobileqrDialogVisible" position="bottom" :style="{ height: '75%' }">
       <div class="mobile-qr-body">
         <h4>报名成功,请尽快联系领队支付订金，支付完成后会正式帮您预留房间与马匹</h4>
-        <img src="/wechatpayQRCode.png" alt="qr" style="width: 50%;"/>
+        <div class="code-group">
+          <img src="/wechatQR.png" alt="qr"/>
+          <img src="/alipayQR.png" alt="qr"/>
+        </div>
       </div>
     </van-popup>
   </div>
@@ -312,6 +318,17 @@ onMounted(() => {
       display: flex;
       flex-direction: column;
       align-items: center;
+      .code-group {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        img {
+          margin: 8px;
+          width: 40%;
+          height: auto;
+        }
+      }
     }
     .dialog-footer {
       display: flex;
@@ -326,5 +343,16 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
+  .code-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    img {
+      margin: 8px;
+      width: 40%;
+      height: auto;
+    }
+  }
 }
 </style>
