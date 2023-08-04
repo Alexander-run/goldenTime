@@ -9,6 +9,7 @@ import {
 import axios from 'axios'
 import moment from 'moment'
 import { ElMessage, ElMessageBox } from 'element-plus'
+
 declare module 'element-plus' {
   export const ElMessage: any
 }
@@ -37,6 +38,7 @@ const userFormRef = ref<FormInstance>()
 const isMobile = computed(() => {
   return window.innerWidth < 768
 })
+const qrDialogVisible = ref(false)
 const rules = {
   name: [
     { required: true, message: '请输入姓名', trigger: 'blur' },
@@ -80,6 +82,7 @@ const onMobileSubmit = async() => {
           message: '报名成功',
           type: 'success',
         })
+        qrDialogVisible.value = true
       } else {
         ElMessage({
           message: '失败了，请稍后重试',
@@ -104,6 +107,7 @@ const onSubmit = async() => {
               message: '报名成功',
               type: 'success',
             })
+            qrDialogVisible.value = true
           } else {
             ElMessage({
               message: '失败了，请稍后重试',
@@ -232,6 +236,14 @@ onMounted(() => {
         </div>
       </van-form>
     </div>
+    <el-dialog class="qr-code-dialog" title="报名成功,请尽快联系领队支付订金，支付完成后会正式帮您预留房间与马匹" v-model="qrDialogVisible" width="50%">
+      <div class="body">
+        <img src="/wechatpayQRCode.png" alt="qr" style="width: 50%;"/>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="qrDialogVisible = false">关闭</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <style lang="less" scoped>
@@ -282,6 +294,22 @@ onMounted(() => {
       > div {
         margin-bottom: 28px;
       }
+    }
+  }
+}
+</style>
+<style lang="less">
+.qr-code-dialog {
+  .el-dialog__body {
+    .body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .dialog-footer {
+      display: flex;
+      flex-direction: column;
+      align-items: right;
     }
   }
 }
