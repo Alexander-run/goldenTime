@@ -5,7 +5,6 @@
   "scripts": {
     "dev": "pnpm recursive --stream run dev",
     "build": "sh ./customizedBuild.sh",
-    "build:front": "pnpm -r --filter=./frontend/* run build",
-    "build:service": "pnpm -r --filter=./service run build"
+    "build:prod": "pnpm recursive --stream run build"
   }
 }

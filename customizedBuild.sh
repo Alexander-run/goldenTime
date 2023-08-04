@@ -1,5 +1,4 @@
-pnpm run build:front
-pnpm run build:service
+pnpm run build:prod
 
 mkdir -p horse/admin
 mkdir -p horse/user
