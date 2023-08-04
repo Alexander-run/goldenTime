@@ -1,4 +1,29 @@
-# 旅行报名信息
+# https://www.fnovatech.com/horse/user
+# https://www.fnovatech.com/horse/admin (密码不能说哦～)
+
+# monorepo结构
+共有3个workspace：前端用户端，前端管理端，后端服务端
+运行pnpm run dev本地启动全部三个项目（mysql数据库需要单独启动）
+# 生产构建
+运行pnpm run build进行打包 (打包脚本需要环境中安装jq命令行工具)
+服务器上需要安装pm2管理node服务进程，配置文件自动打包进build产物
+在服务器上项目根目录(horse)文件夹下运行npm run start启动后端服务
+# Nginx配置
+配置后端服务转发，以及X-Real-IP字段用于限制一台设备每天的表单提交数
+location /api {
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_pass http://127.0.0.1:3000;
+}
+配置两个前端应用的资源转发地址
+location /horse/user {
+    alias __dir__/horse/user;
+    index index.html;
+}
+location /horse/admin {
+    alias __dir__/horse/admin;
+    index index.html;
+}
+# APP使用指南
 ## 1.用户端
 每个用户IP每天只允许提交三次表单，限制恶意DOS操作
 在日期选择框，可以查看所有可用活动日期（均为出发日期）
