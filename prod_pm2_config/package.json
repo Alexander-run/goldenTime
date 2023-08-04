@@ -1,5 +1,5 @@
 {
-  "name": "horseSign",
+  "name": "horse-sign",
   "description": "A simple sign app for Horse riding",
   "scripts": {
     "start": "pm2 start ecosystem.config.js"
