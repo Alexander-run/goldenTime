@@ -1,5 +1,6 @@
 pnpm run build:prod
 
+rm -rf horse
 mkdir -p horse/admin
 mkdir -p horse/user
 mkdir -p horse/apiservice

@@ -39,6 +39,7 @@ const isMobile = computed(() => {
   return window.innerWidth < 768
 })
 const qrDialogVisible = ref(false)
+const mobileqrDialogVisible = ref(false)
 const rules = {
   name: [
     { required: true, message: '请输入姓名', trigger: 'blur' },
@@ -82,7 +83,7 @@ const onMobileSubmit = async() => {
           message: '报名成功',
           type: 'success',
         })
-        qrDialogVisible.value = true
+        mobileqrDialogVisible.value = true
       } else {
         ElMessage({
           message: '失败了，请稍后重试',
@@ -244,6 +245,12 @@ onMounted(() => {
         <el-button @click="qrDialogVisible = false">关闭</el-button>
       </span>
     </el-dialog>
+    <van-popup v-model:show="mobileqrDialogVisible" position="bottom" :style="{ height: '75%' }">
+      <div class="mobile-qr-body">
+        <h4>报名成功,请尽快联系领队支付订金，支付完成后会正式帮您预留房间与马匹</h4>
+        <img src="/wechatpayQRCode.png" alt="qr" style="width: 50%;"/>
+      </div>
+    </van-popup>
   </div>
 </template>
 <style lang="less" scoped>
@@ -312,5 +319,12 @@ onMounted(() => {
       align-items: right;
     }
   }
+}
+.mobile-qr-body {
+  padding: 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 </style>
