@@ -57,6 +57,7 @@ const selectedJourneyForm: Ref<JourneyTableItem> = ref({
 })
 const createFormRef = ref<FormInstance>()
 const editFormRef = ref<FormInstance>()
+const googleInfo = ref<Ref>()
 const rules = {
   depatureDate: [
     { required: true, message: '请选择日期', trigger: 'blur' },
@@ -256,6 +257,56 @@ const handleLogin = () => {
     })
   }
 }
+
+const getGoogleDriveInfo = async() => {
+  const access_token = localStorage.getItem('google_access_token') || ''
+  const scope = localStorage.getItem('google_scope')
+  const url =`${scope}?key=AIzaSyCRRrlR1JSQQgqTRNCzyMw9KzOoBxNWi_k`
+  debugger
+  const response = await fetch(url, {
+    method: 'GET',
+    mode: 'cors',
+    headers: {
+      "Authorization": `Bearer ${access_token}`
+    }
+  })
+}
+const initGoogleOAuth = () => {
+
+  const scope = 'https://www.googleapis.com/auth/drive.metadata.readonly'
+  const redirect_uri = 'http://localhost:8081/horse/admin/'
+  const client_id = '48535351587-akknrarg4eudp36gutlmrr7dffkn362e.apps.googleusercontent.com'
+  // Google's OAuth 2.0 endpoint for requesting an access token
+  var oauth2Endpoint = 'https://accounts.google.com/o/oauth2/v2/auth';
+
+  // Create <form> element to submit parameters to OAuth 2.0 endpoint.
+  var form = document.createElement('form');
+  form.setAttribute('method', 'GET'); // Send as a GET request.
+  form.setAttribute('action', oauth2Endpoint);
+
+  // Parameters to pass to OAuth 2.0 endpoint.
+  var params = {
+                  client_id,
+                  redirect_uri,
+                  response_type: 'token',
+                  scope,
+                  state: 'googleAuthState'
+                };
+
+  // Add form parameters as hidden input values.
+  for (var p in params) {
+    var input = document.createElement('input');
+    input.setAttribute('type', 'hidden');
+    input.setAttribute('name', p);
+    input.setAttribute('value', params[p]);
+    form.appendChild(input);
+  }
+
+  // Add form to page and submit it to open the OAuth 2.0 endpoint.
+  document.body.appendChild(form);
+  form.submit();
+}
+
 onMounted(() => {
   initTable()
 })
@@ -264,6 +315,9 @@ onMounted(() => {
   <div class="user">
     <h2>坝上骑马活动管理中心</h2>
     <el-form class="form" v-if="!isAdmin" @submit.prevent="handleLogin">
+      <el-button @click="initGoogleOAuth">Sign as google</el-button>
+      <el-button @click="getGoogleDriveInfo">Get google drive info</el-button>
+      <div>{{ googleInfo }}</div>
       <el-form-item label="接头暗号">
         <el-input v-model="password" placeholder="接头暗号" type="password" />
       </el-form-item>
