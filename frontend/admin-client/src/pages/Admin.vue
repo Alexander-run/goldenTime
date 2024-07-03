@@ -256,6 +256,12 @@ const handleLogin = () => {
     })
   }
 }
+const initAzureOauth = () => {
+  
+}
+const getAzureInfo = () => {
+  
+}
 onMounted(() => {
   initTable()
 })
@@ -264,6 +270,8 @@ onMounted(() => {
   <div class="user">
     <h2>坝上骑马活动管理中心</h2>
     <el-form class="form" v-if="!isAdmin" @submit.prevent="handleLogin">
+      <el-button @click="initAzureOauth">login as azure account</el-button>
+      <el-button @click="getAzureInfo">click to get azure resource</el-button>
       <el-form-item label="接头暗号">
         <el-input v-model="password" placeholder="接头暗号" type="password" />
       </el-form-item>
